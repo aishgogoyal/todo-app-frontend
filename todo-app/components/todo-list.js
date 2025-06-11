@@ -17,14 +17,17 @@ export default function ToDoList() {
   }, [])
 
   async function fetchTodos(completed) {
-    let path = '/todos'
-    if (completed !== undefined) {
-      path = `/todos?completed=${completed}`
-    }
-    const res = await fetch(process.env.NEXT_PUBLIC_API_URL + path)
-    const json = await res.json()
-    setTodos(json)
+  const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  let path = '/todos';
+  if (completed !== undefined) {
+    path = `/todos?completed=${completed}`;
   }
+
+  const response = await fetch(`${baseURL}${path}`);
+  const data = await response.json();
+  return data;
+}
+
 
   const debouncedUpdateTodo = useCallback(debounce(updateTodo, 500), [])
 
